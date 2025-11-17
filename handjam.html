@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>HandJam</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Back to Portfolio</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li class="active"><a href="index.html">Michael Chou Portfolio</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>Hand Signal Instrument<br /></h1>
+								</header>
+								<video class="video-box" controls>
+										<source src="videos\demo.mp4" type="video/mp4">
+									</video>
+								<p>My group built an interactive audio-synthesis system on an STM32L432KC microcontroller that plays musical notes based on ASL hand-sign number recognition. A custom CNN model running on my laptop classifies the hand gesture, sends the predicted number to the microcontroller over UART, and the STM32 converts that value into a musical note by adjusting a PWM-generated audio signal. The system uses TIM2 for high-frequency PWM output, SysTick for precise timing, and the ADC for reading joystick input, which we used to control when the sound should play.
+								</p>
+								<p>I trained the classification model and implemented the UART communication pipeline that streams real-time inference results to the STM32.</p>
+								<p>We tried implementing a camera interface and the classification model on the STM32 itself but we couldn't get it in time for our final project presentation.</p>
+								<div class="image main"><img src="images\handjam.jpg" alt="" /></div>
+								<p>This was our project poster. Group members: Jonah Pflaster, Michael Chou, and Elliot Friesen. (The top left photo of all of us is actually the downsized images that the computer uses for classification!)</p>
+								<p>This system gave me experience with low-level peripheral configuration, real-time signal processing, and direct register-level programming on the STM32 platform with the CMSIS framework.</p>
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section>
+								<h3>Phone</h3>
+								<p><a href="#">(610) 551-0816</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">michael.chou664040@tufts.edu</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>Template from HTML5up</li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
