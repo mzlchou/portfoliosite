@@ -41,13 +41,21 @@
 							<section class="post">
 								<header class="major">
 									<h1>Malawi Water Tank Level Tracker<br /></h1>
-									<p>This project is also for Tufts Engineers without Borders. The previous project was for the local greenhouse we built,
-										but our club focuses on international projects as well (we do work for communities in Malawi and Ecuador). The project lead asked me to
-										head a project for measuring water level in a tank and sending the data to the United States for remote monitoring via SMS.
+									<p>This project is also for Tufts Engineers without Borders. This is for the community we partner with in Malawi. I led a project for measuring water level in a tank and sending the data to the United States for remote monitoring via cellular.
 									</p>
 								</header>
-								<div class="image main"><img src="images\pic01.jpg" alt="" /></div>
-								<p>Currently I am ordering parts. I decided on using blues because they have STM32 MCU's pre-integrated with a SIM card module and international connectivity.</p>
+								<div class="image main"><img src="images\malawi.jpg" alt="" /></div>
+								<p>The device is solar powered, which charges a battery which we use to power our microcontroller (ESP32C3) and our cellular unit from Blues. 
+									We chose Blues as they guaranteed that the cellular signal works in both United States (for testing) and Malawi for implementation in addition to the interface being easy to use. The ESP32 stores 24 ultrasonic sensor readings (once an hour) to determine how full the tank is,
+									and then stores it in an SD card file. At the end of the day, the microcontroller sends the file via serial to the Blues cellular communication unit to send to the Blues Notehub. Notehub is routed to HTTP endpoint on our website for viewing.
+								</p>
+								<div class="image main"><img src="images\labeledmalawi.png" alt="" /></div>
+								<p>Here is a closer look at the device. It is a little messy since we wanted to expose our parts for the final EWB showcase.
+								</p>
+								<p>A: ESP32 B: SD Card Module C: Ultrasonic Sensor (mounted at the bottom of the box) D: Blues Notecard
+								</p>
+								<p>Future Proofing: Using a Protoboard or PCB
+								</p>
 							</section>
 
 					</div>
