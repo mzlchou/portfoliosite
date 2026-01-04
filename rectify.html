@@ -29,8 +29,8 @@
 						</ul>
 						<ul class="icons">
 							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-									<a href="resume.html" class="button small">Resume</a>
+							<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<a href="resume.html" class="button small">Resume</a>
 						</ul>
 					</nav>
 
@@ -40,13 +40,87 @@
 						<!-- Post -->
 							<section class="post">
 								<header class="major">
-									<h1>Page Rectification Pipeline<br /></h1>
-									<p>This project implements an automatic document rectification pipeline that detects a document within an image, finds its corners, and applies a homography transform to produce a top down, flattened version of the page. The pipeline processes all images in an input folder and outputs rectified versions to an outputs directory</p>
+									<h1>Page Rectification Pipeline</h1>
+									<p>Automatic Document Detection & Homography Transform</p>
 								</header>
-								<div class="image main"><img src="images\rectify.png" alt="" /></div>
-								<p>This is an example of how it works.</p>
-								<p>The pipeline detects a document within an image, identifies its four corners, and applies a homography transform to produce a clean, top-down view of the page. The pipeline performs grayscale conversion, Gaussian blurring, Canny edge detection, morphological processing, and contour extraction to isolate the document. It then approximates the largest contour using Ramer–Douglas–Peucker polygonal simplification and selects or recovers four corner points, ordering them consistently before computing a homography with OpenCV.</p>
-								<p>These were all mathematical concepts that I learned in my computer vision class, so it really helped a lot to implement them in a real project to understand them even better.</p>
+
+								<!-- Project Summary -->
+								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
+									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Project Summary</h4>
+									<p style="font-size: 1.05rem; line-height: 1.8;">
+										This project implements an <strong>automatic document rectification pipeline</strong> that detects a document within an image, finds its corners, and applies a <strong>homography transform</strong> to produce a top-down, flattened version of the page. The pipeline processes all images in an input folder and outputs rectified versions to an outputs directory.
+									</p>
+								</div>
+
+								<!-- Key Stats -->
+								<div class="stats-grid">
+									<div class="stat-card">
+										<div class="number">4</div>
+										<div class="label">Corner Detection</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">Auto</div>
+										<div class="label">Batch Processing</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">OpenCV</div>
+										<div class="label">Framework</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">Python</div>
+										<div class="label">Language</div>
+									</div>
+								</div>
+
+								<!-- Technologies -->
+								<div class="tech-tags">
+									<span class="tech-tag">Python</span>
+									<span class="tech-tag">OpenCV</span>
+									<span class="tech-tag">Homography</span>
+									<span class="tech-tag">Canny Edge Detection</span>
+									<span class="tech-tag">Computer Vision</span>
+								</div>
+
+								<!-- Example -->
+								<h2 class="section-header">How It Works</h2>
+
+								<div class="image main"><img src="images/rectify.png" alt="Rectification Example" /></div>
+								<p class="image-caption">Example: original image → rectified output</p>
+
+								<!-- Pipeline Steps -->
+								<h2 class="section-header">Pipeline Steps</h2>
+
+								<div class="two-column">
+									<div>
+										<h3>Image Processing</h3>
+										<ul>
+											<li>Grayscale conversion</li>
+											<li>Gaussian blurring</li>
+											<li>Canny edge detection</li>
+											<li>Morphological processing</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Geometry & Transform</h3>
+										<ul>
+											<li>Contour extraction</li>
+											<li>Ramer-Douglas-Peucker simplification</li>
+											<li>4-corner detection & ordering</li>
+											<li>Homography computation (OpenCV)</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="highlight-box">
+									<h4>Theory to Practice</h4>
+									<p>These were all mathematical concepts that I learned in my computer vision class, so it really helped to implement them in a real project to understand them even better.</p>
+								</div>
+
+								<!-- Links -->
+								<ul class="actions special">
+									<li><a href="https://github.com/mzlchou/Page-Rectification" class="button large">View on GitHub</a></li>
+								</ul>
+
 							</section>
 
 					</div>

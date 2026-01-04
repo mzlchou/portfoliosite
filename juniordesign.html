@@ -1,0 +1,424 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Autonomous Navigation Robot</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Back to Portfolio</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li class="active"><a href="index.html">Michael Chou Portfolio</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<a href="resume.html" class="button small">Resume</a>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>Autonomous Navigation Robot</h1>
+									<p>Color-Following & Multi-Robot Coordination via WebSocket</p>
+								</header>
+
+								<video class="video-box" controls style="width: 100%;">
+											<source src="videos/solo.mp4" type="video/mp4">
+										</video>
+
+								<!-- Project Summary -->
+								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
+									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Project Summary</h4>
+									<p style="font-size: 1.05rem; line-height: 1.8;">
+										Built an autonomous robot that navigates a colored track using <strong>custom color detection circuits</strong>, <strong>IR wall detection</strong>, and <strong>WebSocket-based communication</strong> for multi-robot coordination. The robot follows red, blue, and yellow lanes, detects walls to avoid collisions, and can coordinate with a second robot for joint navigation tasks, all controlled via a state machine with remote calibration capabilities.
+									</p>
+								</div>
+
+								<!-- Key Stats -->
+								<!-- <div class="stats-grid">
+									<div class="stat-card">
+										<div class="number">4</div>
+										<div class="label">Colors Detected</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">2</div>
+										<div class="label">Robot Coordination</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">WiFi</div>
+										<div class="label">WebSocket Control</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">IR</div>
+										<div class="label">Wall Detection</div>
+									</div>
+								</div> -->
+
+								<!-- Technologies -->
+								<div class="tech-tags">
+									<span class="tech-tag">Arduino Uno WiFi Rev2</span>
+									<span class="tech-tag">C/C++</span>
+									<span class="tech-tag">WebSocket</span>
+									<span class="tech-tag">H-Bridge Motor Control</span>
+									<span class="tech-tag">PWM</span>
+									<span class="tech-tag">Phototransistors</span>
+									<span class="tech-tag">IR Sensors</span>
+								</div>
+
+								<!-- Hardware -->
+								<h2 class="section-header">Hardware Design</h2>
+
+								<div class="two-column">
+									<div>
+										<h3>Controller & Drive</h3>
+										<ul>
+											<li><strong>Controller:</strong> Arduino Uno WiFi Rev2</li>
+											<li><strong>Motors:</strong> Two DC motors</li>
+											<li><strong>Motor Control:</strong> L293D H-bridge with PWM speed control</li>
+											<li><strong>Power:</strong> 9V battery (motors) + 5V regulated (logic)</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Sensors</h3>
+										<ul>
+											<li><strong>Color Detection:</strong> Red/Blue LEDs + phototransistor</li>
+											<li><strong>Wall Detection:</strong> IR LED + IR phototransistor</li>
+											<li><strong>Light Shielding:</strong> Physical isolation from ambient light</li>
+											<li><strong>High-value resistors:</strong> Up to 1MΩ for sensitivity</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="image main"><img src="images/schematics.jpg" alt="Circuit Schematics" /></div>
+								<p class="image-caption">Circuit schematics for color detection and IR sensing</p>
+
+								<!-- Color Detection -->
+								<h2 class="section-header">Color Detection System</h2>
+
+								<p>The color detection system uses LED emitters paired with a phototransistor to distinguish between red, blue, yellow, and black surfaces. By alternating which LED is on and measuring the reflected light, we can identify the surface color:</p>
+
+								<table class="results-table">
+									<thead>
+										<tr>
+											<th>Color</th>
+											<th>Red LED Reading</th>
+											<th>Blue LED Reading</th>
+											<th>Detection Logic</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Blue</strong></td>
+											<td>Low</td>
+											<td>High (&gt;600)</td>
+											<td>Blue reflects blue light</td>
+										</tr>
+										<tr>
+											<td><strong>Yellow</strong></td>
+											<td>High (&gt;580)</td>
+											<td>Medium</td>
+											<td>Yellow reflects red well (which was odd)</td>
+										</tr>
+										<tr>
+											<td><strong>Red</strong></td>
+											<td>Medium (&gt;455)</td>
+											<td>Medium (&gt;400)</td>
+											<td>Red reflects both moderately</td>
+										</tr>
+										<tr>
+											<td><strong>Black</strong></td>
+											<td>Low (&lt;390)</td>
+											<td>Low (&lt;410)</td>
+											<td>Black absorbs all light</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<div class="highlight-box">
+									<h4>Moving Average Filter</h4>
+									<p>To reduce noise in sensor readings, we implemented a <strong>100-sample circular buffer</strong> for moving average filtering. This smooths out transient spikes and provides stable color detection even with varying ambient light conditions.</p>
+								</div>
+
+								<!-- Navigation Modes -->
+								<h2 class="section-header">Navigation Modes</h2>
+
+								<div class="two-column">
+									<div>
+										<h3>Solo Navigation</h3>
+										<ul>
+											<li>Go forward until wall detected (IR)</li>
+											<li>Turn 180°, find colored lane</li>
+											<li>Follow lane until next wall</li>
+											<li>Navigate to yellow lane</li>
+											<li>Return to starting position</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Joint Navigation</h3>
+										<ul>
+											<li>Bot 1 starts, signals "AT_RED" via WebSocket</li>
+											<li>Bot 2 waits for signal, then starts</li>
+											<li>Bots follow their respective lanes</li>
+											<li>Coordination via acknowledgment messages</li>
+											<li>Both signal "HOME" when returned</li>
+										</ul>
+									</div>
+								</div>
+
+								<!-- State Machine -->
+								<h2 class="section-header">State Machine</h2>
+
+								<p>The robot operates using a state machine with the following states:</p>
+
+								<table class="results-table">
+									<thead>
+										<tr>
+											<th>State</th>
+											<th>Action</th>
+											<th>Trigger</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>0</strong></td>
+											<td>Go Forward</td>
+											<td>Default movement</td>
+										</tr>
+										<tr>
+											<td><strong>1</strong></td>
+											<td>Go Backward</td>
+											<td>Wall detected, need to reverse</td>
+										</tr>
+										<tr>
+											<td><strong>2</strong></td>
+											<td>Turn Left</td>
+											<td>Navigation logic</td>
+										</tr>
+										<tr>
+											<td><strong>3</strong></td>
+											<td>Turn Right</td>
+											<td>Navigation logic</td>
+										</tr>
+										<tr>
+											<td><strong>4</strong></td>
+											<td>Stop</td>
+											<td>Wall detected or button press</td>
+										</tr>
+										<tr>
+											<td><strong>5</strong></td>
+											<td>Pivot Right</td>
+											<td>Fine turning adjustment</td>
+										</tr>
+										<tr>
+											<td><strong>6</strong></td>
+											<td>Pivot Left</td>
+											<td>Fine turning adjustment</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- WebSocket Communication -->
+								<h2 class="section-header">WebSocket Communication</h2>
+
+								<div class="highlight-box">
+									<h4>Remote Calibration & Control</h4>
+									<p>The robot connects to a WebSocket server for real-time control and calibration. Through the WebSocket interface, we can remotely adjust:</p>
+									<ul style="margin-bottom: 0;">
+										<li><strong>IR_LIMIT:</strong> Wall detection threshold (0-1023)</li>
+										<li><strong>NAV_SPEED:</strong> Movement speed (0-255)</li>
+										<li><strong>NAV_TYPE:</strong> Navigation mode (solo/joint)</li>
+										<li><strong>PIVOT_DELAY:</strong> Turn timing calibration</li>
+									</ul>
+								</div>
+
+								<p>Multi-robot coordination uses a simple message protocol:</p>
+								<ul>
+									<li><code>B1:START</code> - Bot 1 starting navigation</li>
+									<li><code>B1:AT_RED</code> - Bot 1 reached red lane</li>
+									<li><code>B2:AT_BLUE</code> - Bot 2 reached blue lane</li>
+									<li><code>B1:ACK_AT_BLUE</code> - Bot 1 acknowledges Bot 2's position</li>
+									<li><code>B1:HOME</code> / <code>B2:HOME</code> - Bots returned to start</li>
+								</ul>
+
+								<!-- Design Evolution -->
+								<!-- <h2 class="section-header">Design Evolution</h2>
+
+								<div class="two-column">
+									<div>
+										<h3>Initial Prototype</h3>
+										<ul>
+											<li>Breadboard-based circuits</li>
+											<li>Messy wiring</li>
+											<li>Unstable sensor readings</li>
+											<li>No chassis organization</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Final Design</h3>
+										<ul>
+											<li>Laser-cut acrylic chassis (Onshape)</li>
+											<li>Organized mounting locations</li>
+											<li>Physical light shielding for sensors</li>
+											<li>Clean wiring layout</li>
+										</ul>
+									</div>
+								</div> -->
+
+								<!-- More Bot Photos -->
+								<h2 class="section-header">Final Robot</h2>
+
+								<div class="image main"><img src="images/side.jpg" alt="Robot Side View" /></div>
+								<p class="image-caption">Side view showing laser-cut chassis and wheel assembly (and horn)</p>
+
+								<div class="image main"><img src="images/top.jpg" alt="Robot Top View" /></div>
+								<p class="image-caption">Top view showing Arduino, 5V voltage regulator and IR sensor layout</p>
+
+								<div class="image main"><img src="images/bottom.jpg" alt="Robot Bottom View" /></div>
+								<p class="image-caption">Bottom view showing color detection LEDs and H-bridge </p>
+
+								<!-- Key Features -->
+								<h2 class="section-header">Key Features</h2>
+
+								<ul>
+									<li><strong>Lane Recovery:</strong> If the robot loses the colored lane, it performs a search pattern (pivot left/right) to re-acquire the target color</li>
+									<li><strong>Battery Monitoring:</strong> Resistor-LED ladder for voltage sensing with calibration routines to adapt to changing battery levels</li>
+									<li><strong>Horn:</strong> I2S amplifier and speaker connected to PWM pin (340Hz tone)</li>
+									<li><strong>Team ID Filtering:</strong> WebSocket messages filtered by client ID to prevent interference from other teams</li>
+								</ul>
+
+								<!-- Go Beyond -->
+								<h2 class="section-header">Go Beyond: Remote Control System</h2>
+
+								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
+									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">The Final Feature</h4>
+									<p style="font-size: 1.05rem; line-height: 1.8;">
+										Our Go Beyond was a <strong>WebSocket-based web app and remote control</strong> used to control the robot with a joystick. We hosted our local WebSocket server using Docker, which allowed us to control different robot states (solo demos, joint demos, and Go Beyond) and gave us the ability to debug without interfering with anyone else's server communication.
+									</p>
+								</div>
+
+								<div class="two-column">
+									<div>
+										<h3>Remote Control Hardware</h3>
+										<ul>
+											<li>Second Arduino connected to joystick</li>
+											<li>ADC reads X and Y positions</li>
+											<li>Sends directional commands to server</li>
+											<li>Push joystick in to honk!</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Web App Interface</h3>
+										<ul>
+											<li>Connect to WebSocket server</li>
+											<li>Send commands and view all messages</li>
+											<li>Set robot into different modes</li>
+											<li>Real-time calibration controls</li>
+										</ul>
+									</div>
+								</div>
+
+								<p>We chose to create a remote control for our Go Beyond as a fun way to manually control our robot and test our web app/WebSocket integration skills. Instead of having the robot follow a track for the solo and joint demos, we were able to drive it around the room and interact with it through our interface.</p>
+
+								<!-- Demo Videos -->
+								<h2 class="section-header">Demo Videos</h2>
+
+								<div class="two-column">
+									<div>
+										<h3>Joint Demo</h3>
+										<video class="video-box" controls style="width: 100%;">
+											<source src="videos/joint.mp4" type="video/mp4">
+										</video>
+										<p class="image-caption">Joint navigation following colored lanes</p>
+									</div>
+									<div>
+										<h3>Go Beyond: Remote Control</h3>
+										<video class="video-box" controls style="width: 100%;">
+											<source src="videos/gobeyond.mp4" type="video/mp4">
+										</video>
+										<p class="image-caption">Joystick control via WebSocket</p>
+									</div>
+								</div>
+
+								<!-- Team -->
+								<h2 class="section-header">The Team</h2>
+
+								<p>This was a group project for <strong>EE31: Junior Design</strong> at Tufts University.</p>
+
+								<ul>
+									<li><strong>Michael Chou</strong></li>
+									<li><strong>Jonah Pflaster</strong></li>
+									<li><strong>Daniel Jarka</strong></li>
+									<li><strong>Paul Wang</strong></li>
+								</ul>
+
+								<!-- Links -->
+								<ul class="actions special">
+									<li><a href="https://github.com/jpizzzel/Junior-Design-Project" class="button large">Bot Code</a></li>
+									<li><a href="https://github.com/jpizzzel/ee31_websocket_page" class="button large">WebSocket Server</a></li>
+								</ul>
+
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section>
+								<h3>Phone</h3>
+								<p><a href="#">(610) 551-0816</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">michael.chou664040@tufts.edu</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>Template from HTML5up</li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

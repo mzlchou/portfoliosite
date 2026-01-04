@@ -29,8 +29,8 @@
 						</ul>
 						<ul class="icons">
 							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-									<a href="resume.html" class="button small">Resume</a>
+							<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<a href="resume.html" class="button small">Resume</a>
 						</ul>
 					</nav>
 
@@ -40,22 +40,129 @@
 						<!-- Post -->
 							<section class="post">
 								<header class="major">
-									<h1>Malawi Water Tank Level Tracker<br /></h1>
-									<p>This project is also for Tufts Engineers without Borders. This is for the community we partner with in Malawi. I led a project for measuring water level in a tank and sending the data to the United States for remote monitoring via cellular.
-									</p>
+									<h1>Malawi Water Tank Level Tracker</h1>
+									<p>Engineers Without Borders @ Tufts</p>
 								</header>
-								<div class="image main"><img src="images\malawi.jpg" alt="" /></div>
-								<p>The device is solar powered, which charges a battery which we use to power our microcontroller (ESP32C3) and our cellular unit from Blues. 
-									We chose Blues as they guaranteed that the cellular signal works in both United States (for testing) and Malawi for implementation in addition to the interface being easy to use. The ESP32 stores 24 ultrasonic sensor readings (once an hour) to determine how full the tank is,
-									and then stores it in an SD card file. At the end of the day, the microcontroller sends the file via serial to the Blues cellular communication unit to send to the Blues Notehub. Notehub is routed to HTTP endpoint on our website for viewing.
-								</p>
-								<div class="image main"><img src="images\labeledmalawi.png" alt="" /></div>
-								<p>Here is a closer look at the device. It is a little messy since we wanted to expose our parts for the final EWB showcase.
-								</p>
-								<p>A: ESP32 B: SD Card Module C: Ultrasonic Sensor (mounted at the bottom of the box) D: Blues Notecard
-								</p>
-								<p>Future Proofing: Using a Protoboard or PCB
-								</p>
+
+								<!-- Main Image -->
+								<div class="image main"><img src="images/malawi.jpg" alt="Malawi Water Tank Project" /></div>
+
+								<!-- Project Summary -->
+								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
+									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Project Summary</h4>
+									<p style="font-size: 1.05rem; line-height: 1.8;">
+										This project is for the community we partner with in Malawi through Tufts Engineers Without Borders. I led a project for <strong>measuring water level in a tank and sending the data to the United States for remote monitoring via cellular</strong>. The device is solar powered, charging a battery that powers our ESP32C3 microcontroller and Blues cellular unit.
+									</p>
+								</div>
+
+								<!-- Key Stats -->
+								<!-- <div class="stats-grid">
+									<div class="stat-card">
+										<div class="number">24</div>
+										<div class="label">Readings/Day</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">Solar</div>
+										<div class="label">Powered</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">Cellular</div>
+										<div class="label">Data Transfer</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">Remote</div>
+										<div class="label">Monitoring</div>
+									</div>
+								</div> -->
+
+								<!-- Technologies -->
+								<div class="tech-tags">
+									<span class="tech-tag">ESP32C3</span>
+									<span class="tech-tag">Blues Notecard</span>
+									<span class="tech-tag">Ultrasonic Sensor</span>
+									<span class="tech-tag">Solar Power</span>
+									<span class="tech-tag">SD Card</span>
+									<span class="tech-tag">HTTP</span>
+								</div>
+
+								<!-- How It Works -->
+								<h2 class="section-header">How It Works</h2>
+
+								<div class="two-column">
+									<div>
+										<h3>Data Collection</h3>
+										<ul>
+											<li>Ultrasonic sensor measures tank water level</li>
+											<li>ESP32 takes readings once per hour</li>
+											<li>24 readings stored daily on SD card</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Data Transmission</h3>
+										<ul>
+											<li>End of day: file sent via serial to Blues Notecard</li>
+											<li>Cellular upload to Blues Notehub</li>
+											<li>Routed to HTTP endpoint on our website</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="highlight-box">
+									<h4>Why Blues?</h4>
+									<p>We chose Blues because they guaranteed that the cellular signal works in both the <strong>United States</strong> (for testing) and <strong>Malawi</strong> (for implementation), in addition to the interface being easy to use.</p>
+								</div>
+
+								<!-- Hardware -->
+								<h2 class="section-header">Hardware Components</h2>
+
+								<div class="image main"><img src="images/labeledmalawi.png" alt="Labeled Device Components" /></div>
+								<p class="image-caption">Device internals exposed for EWB showcase</p>
+
+								<table class="results-table">
+									<thead>
+										<tr>
+											<th>Label</th>
+											<th>Component</th>
+											<th>Purpose</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>A</strong></td>
+											<td>ESP32C3</td>
+											<td>Main microcontroller</td>
+										</tr>
+										<tr>
+											<td><strong>B</strong></td>
+											<td>SD Card Module</td>
+											<td>Local data storage</td>
+										</tr>
+										<tr>
+											<td><strong>C</strong></td>
+											<td>Ultrasonic Sensor</td>
+											<td>Water level measurement (mounted at bottom)</td>
+										</tr>
+										<tr>
+											<td><strong>D</strong></td>
+											<td>Blues Notecard</td>
+											<td>Cellular communication</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- Future Work -->
+								<h2 class="section-header">Future Work</h2>
+
+								<div class="highlight-box">
+									<h4>Future Proofing</h4>
+									<p>The current prototype uses a breadboard for rapid iteration. Next steps include moving to a <strong>protoboard or custom PCB</strong> for a more robust, long-term deployment in Malawi.</p>
+								</div>
+
+								<!-- Links -->
+								<!-- <ul class="actions special">
+									<li><a href="https://github.com/mzlchou/malawi-water-tracker" class="button large">View on GitHub</a></li>
+								</ul> -->
+
 							</section>
 
 					</div>

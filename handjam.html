@@ -29,7 +29,8 @@
 						</ul>
 						<ul class="icons">
 							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<a href="resume.html" class="button small">Resume</a>
 						</ul>
 					</nav>
 
@@ -39,18 +40,134 @@
 						<!-- Post -->
 							<section class="post">
 								<header class="major">
-									<h1>Hand Signal Instrument<br /></h1>
+									<h1>HandJam</h1>
+									<p>An ASL Controlled Musical Instrument</p>
 								</header>
-								<video class="video-box" controls>
-										<source src="videos\demo.mp4" type="video/mp4">
-									</video>
-								<p>My group built an interactive audio-synthesis system on an STM32L432KC microcontroller that plays musical notes based on ASL hand-sign number recognition. A custom CNN model running on my laptop classifies the hand gesture, sends the predicted number to the microcontroller over UART, and the STM32 converts that value into a musical note by adjusting a PWM-generated audio signal. The system uses TIM2 for high-frequency PWM output, SysTick for precise timing, and the ADC for reading joystick input, which we used to control when the sound should play.
-								</p>
-								<p>I trained the classification model and implemented the UART communication pipeline that streams real-time inference results to the STM32.</p>
-								<p>We tried implementing a camera interface and the classification model on the STM32 itself but we couldn't get it in time for our final project presentation.</p>
-								<div class="image main"><img src="images\handjam.jpg" alt="" /></div>
-								<p>This was our project poster. Group members: Jonah Pflaster, Michael Chou, and Elliot Friesen. (The top left photo of all of us is actually the downsized images that the computer uses for classification!)</p>
-								<p>This system gave me experience with low-level peripheral configuration, real-time signal processing, and direct register-level programming on the STM32 platform with the CMSIS framework.</p>
+
+								<!-- Video -->
+								<video class="video-box" controls style="width: 100%; margin-bottom: 2rem;">
+									<source src="videos/demo.mp4" type="video/mp4">
+								</video>
+
+								<!-- Project Summary -->
+								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
+									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Project Summary</h4>
+									<p style="font-size: 1.05rem; line-height: 1.8;">
+										HandJam is an "instrument" played using <strong>American Sign Language numbers (0-9)</strong> to play corresponding musical notes. A custom CNN model classifies hand gestures from a live camera feed, and the STM32 microcontroller converts predictions into audio via PWM. We scaled everything to fit on the <strong>NUCLEO-L432KC</strong>, including downsizing images to <strong>64x64 pixels</strong> for real-time inference (when inference was originally supposed to run on the STM32). The model was trained on ~2000 ASL images and achieves <strong>90-100% accuracy</strong> under good lighting with a clear background.
+									</p>
+								</div>
+
+								<!-- Key Stats -->
+								<!-- <div class="stats-grid">
+									<div class="stat-card">
+										<div class="number">10</div>
+										<div class="label">ASL Numbers (0-9)</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">64x64</div>
+										<div class="label">Image Size</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">~2000</div>
+										<div class="label">Training Images</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">90-100%</div>
+										<div class="label">Accuracy</div>
+									</div>
+								</div> -->
+
+								<!-- Technologies -->
+								<div class="tech-tags">
+									<span class="tech-tag">TensorFlow</span>
+									<span class="tech-tag">Python</span>
+									<span class="tech-tag">C</span>
+									<span class="tech-tag">STM32</span>
+									<span class="tech-tag">PlatformIO</span>
+									<span class="tech-tag">UART</span>
+									<span class="tech-tag">PWM</span>
+									<span class="tech-tag">CMSIS</span>
+								</div>
+
+								<!-- System Architecture -->
+								<h2 class="section-header">System Architecture</h2>
+
+								<div class="two-column">
+									<div>
+										<h3>ML Pipeline (Laptop)</h3>
+										<ul>
+											<li>Camera captures hand gesture</li>
+											<li>Image scaled to 64x64 for real-time processing</li>
+											<li>Custom CNN classifies ASL number</li>
+											<li>Prediction sent to STM32 over UART</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Audio Synthesis (STM32)</h3>
+										<ul>
+											<li>TIM2 generates high-frequency PWM</li>
+											<li>Number mapped to musical frequency</li>
+											<li>ADC reads joystick for sound control</li>
+											<li>SysTick provides precise timing</li>
+										</ul>
+									</div>
+								</div>
+
+								<!-- My Contributions -->
+								<h2 class="section-header">My Contributions</h2>
+
+								<ul>
+									<li>Trained the CNN classification model on ~2000 ASL images</li>
+									<li>Implemented the UART communication pipeline streaming real-time inference to the STM32</li>
+									<li>Low level peripheral configuration and register level programming with CMSIS</li>
+								</ul>
+
+								<!-- Hardware -->
+								<h2 class="section-header">Hardware</h2>
+
+								<table class="results-table">
+									<thead>
+										<tr>
+											<th>Component</th>
+											<th>Purpose</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>NUCLEO-L432KC</strong></td>
+											<td>Main microcontroller (STM32L432KC)</td>
+										</tr>
+										<tr>
+											<td><strong>PAM8302 Amplifier</strong></td>
+											<td>Audio amplification</td>
+										</tr>
+										<tr>
+											<td><strong>8Ω Speaker</strong></td>
+											<td>Audio output</td>
+										</tr>
+										<tr>
+											<td><strong>7-Segment Display</strong></td>
+											<td>Shows detected number</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- Poster -->
+								<h2 class="section-header">The Team</h2>
+								<div class="image main"><img src="images/handjam.jpg" alt="HandJam Project Poster" /></div>
+								<p class="image-caption">Project poster. Group members: Jonah Pflaster, Michael Chou, and Elliot Friesen. (The top left photo is actually the downsized 64x64 images used for classification!)</p>
+
+								<!-- Future Work -->
+								<div class="highlight-box">
+									<h4>Future Work</h4>
+									<p>We attempted to run both the camera interface and classification model directly on the STM32 but couldn't get it working in time for the final presentation. Running the full pipeline on-device without a laptop remains an interesting challenge for future iterations.</p>
+								</div>
+
+								<!-- Links -->
+								<ul class="actions special">
+									<li><a href="https://github.com/mzlchou/HandJam" class="button large">View on GitHub</a></li>
+								</ul>
+
 							</section>
 
 					</div>

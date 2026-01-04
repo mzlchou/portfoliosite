@@ -29,8 +29,8 @@
 						</ul>
 						<ul class="icons">
 							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-									<a href="resume.html" class="button small">Resume</a>
+							<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<a href="resume.html" class="button small">Resume</a>
 						</ul>
 					</nav>
 
@@ -40,16 +40,91 @@
 						<!-- Post -->
 							<section class="post">
 								<header class="major">
-									<h1>Guitar Hero on FPGA<br /></h1>
-									<video class="video-box" controls>
-										<source src="videos\guitarhero.mp4" type="video/mp4">
-									</video>
+									<h1>Guitar Hero on FPGA</h1>
+									<p>A Hardware Driven Rhythm Game in VHDL</p>
 								</header>
-								<p>My group developed a real-time Guitar Hero based game on an FPGA using VHDL, integrating VGA graphics, audio synthesis, and a custom guitar-controller input system. I designed the full game logic and hardware VGA renderer that draws falling blocks/notes based on screen position and a key comparison unit that checks the player’s inputs against expected notes each frame. These are then compared for your ending score, that converts note accuracy into BCD values.</p>
-								<div class="image main"><img src="images\guitar.jpg" alt="" /></div>
-								<p>Group members (in order): Cooper Bailey, Michael Chou, Paul Wang, and Max Harrington.</p>
-								<p>We implemented real time audio synthesis in VHDL by generating square wave tones in the FPGA. Each of the toy guitar's 5 buttons are mapped to a different frequency by adjusting the wave period, and a counter based oscillator produced the audio signal. It essentially works as an instrument on it's own! The result is a fully hardware-driven game loop that runs smoothly on the FPGA with no CPU or software involved.</p>
-								<p>This was the final project for Tufts ES4, digital logic and circuits, which I am a teaching assistant for. I am guiding a group now through their own implementation of Guitar Hero in SystemVerilog.</p>
+
+								<!-- Video -->
+								<video class="video-box" controls style="width: 100%; margin-bottom: 2rem;">
+									<source src="videos/guitarhero.mp4" type="video/mp4">
+								</video>
+
+								<!-- Project Summary -->
+								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
+									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Project Summary</h4>
+									<p style="font-size: 1.05rem; line-height: 1.8;">
+										My group developed a real-time Guitar Hero game on an FPGA using VHDL, integrating <strong>VGA graphics</strong>, <strong>audio synthesis</strong>, and a <strong>custom guitar controller input system</strong>. I designed the full game logic and hardware VGA renderer that draws falling notes based on screen position, plus a key comparison unit that checks player inputs against expected notes each frame. The result is a fully hardware-driven game loop that runs smoothly on the FPGA with no CPU or software involved.
+									</p>
+								</div>
+
+								<!-- Key Stats -->
+								<!-- <div class="stats-grid">
+									<div class="stat-card">
+										<div class="number">5</div>
+										<div class="label">Note Lanes</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">VGA</div>
+										<div class="label">Graphics Output</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">0</div>
+										<div class="label">CPU/Software</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">VHDL</div>
+										<div class="label">Implementation</div>
+									</div>
+								</div> -->
+
+								<!-- Technologies -->
+								<div class="tech-tags">
+									<span class="tech-tag">VHDL</span>
+									<span class="tech-tag">FPGA</span>
+									<span class="tech-tag">VGA Graphics</span>
+									<span class="tech-tag">Audio Synthesis</span>
+									<span class="tech-tag">Digital Logic</span>
+								</div>
+
+								<!-- My Contributions -->
+								<h2 class="section-header">My Contributions</h2>
+
+								<div class="two-column">
+									<div>
+										<h3>Game Logic & VGA Renderer</h3>
+										<ul>
+											<li>Falling block/note rendering based on screen position</li>
+											<li>Key comparison unit checking inputs each frame</li>
+											<li>Score calculation converting note accuracy to BCD</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Audio Synthesis</h3>
+										<ul>
+											<li>Real-time square wave tone generation</li>
+											<li>5 buttons mapped to different frequencies</li>
+											<li>Counter-based oscillator for audio signal</li>
+											<li>Works as a standalone instrument!</li>
+										</ul>
+									</div>
+								</div>
+
+								<!-- Team Photo -->
+								<h2 class="section-header">The Team</h2>
+								<div class="image main"><img src="images/guitar.jpg" alt="Guitar Hero Team" /></div>
+								<p>Left to right: Cooper Bailey, Michael Chou, Paul Wang, and Max Harrington</p>
+
+								<!-- Context -->
+								<div class="highlight-box">
+									<h4>From Student to TA</h4>
+									<p>This was the final project for Tufts ES4 (Digital Logic and Circuits), which I am now a teaching assistant for. I'm currently guiding a group through their own implementation of Guitar Hero in SystemVerilog.</p>
+								</div>
+
+								<!-- Links -->
+								<ul class="actions special">
+									<li><a href="https://github.com/mzlchou/GuitarHeroVHDL" class="button large">View on GitHub</a></li>
+								</ul>
+
 							</section>
 
 					</div>

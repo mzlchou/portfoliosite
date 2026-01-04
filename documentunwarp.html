@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Document Unwarping</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Back to Portfolio</a>
+					</header>
+
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li class="active"><a href="index.html">Michael Chou Portfolio</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<a href="resume.html" class="button small">Resume</a>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>Document Unwarping</h1>
+									<p>Computer Vision Final Project</p>
+								</header>
+
+								<!-- Project Summary -->
+								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
+									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Project Summary</h4>
+									<p style="font-size: 1.05rem; line-height: 1.8;">
+										This project implements a deep learning-based document unwarping system that predicts <strong>UV coordinate fields</strong> to geometrically rectify warped/curved document images. The model uses a <strong>two-stage coarse-to-fine approach</strong> with progressive loss scheduling for robust training. The model doesn't predict a rectified image directly, it predicts a geometric mapping where each output pixel queries "where in the input do I come from?" (backward warping).
+									</p>
+								</div>
+
+								<!-- Key Stats -->
+								<div class="stats-grid">
+									<div class="stat-card">
+										<div class="number">~0.6</div>
+										<div class="label">Masked SSIM</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">512x512</div>
+										<div class="label">Resolution</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">2-Stage</div>
+										<div class="label">UV Prediction</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">7</div>
+										<div class="label">Loss Functions</div>
+									</div>
+								</div>
+
+								<!-- Technologies -->
+								<div class="tech-tags">
+									<span class="tech-tag">PyTorch</span>
+									<span class="tech-tag">ResNet50</span>
+									<span class="tech-tag">U-Net</span>
+									<span class="tech-tag">Kornia</span>
+									<span class="tech-tag">Google Colab A100</span>
+									<span class="tech-tag">Mixed Precision</span>
+									<span class="tech-tag">SSIM</span>
+								</div>
+
+								<!-- Results -->
+								<h2 class="section-header">Results</h2>
+
+								<div class="image main"><img src="images/exampleunwarp.png" alt="Document Unwarping Results" /></div>
+								<p class="image-caption">Input (warped) → Prediction (dewarped) → Ground Truth → Error map</p>
+
+								<p>The model achieves ~0.59-0.6 Masked SSIM on the validation set. I found there was often a tradeoff between high SSIM (structural similarity) and text clarity—sometimes a higher SSIM didn't mean the text was more readable.</p>
+
+								<!-- Architecture -->
+								<h2 class="section-header">Model Architecture</h2>
+
+								<div class="image main"><img src="images/model.png" alt="Model Architecture" /></div>
+								<p class="image-caption">U-Net style encoder-decoder with two-stage warping head</p>
+
+								<div class="two-column">
+									<div>
+										<h3>Encoder-Decoder</h3>
+										<ul>
+											<li><strong>Encoder:</strong> ResNet50 backbone (pretrained)</li>
+											<li><strong>Decoder:</strong> U-Net style with skip connections</li>
+											<li><strong>Normalization:</strong> GroupNorm (stable for small batches)</li>
+											<li><strong>UV Output:</strong> Tanh-bounded residuals clamped to [0,1]</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Two-Stage Warping Head</h3>
+										<ul>
+											<li><strong>Coarse:</strong> 8x8 features for large deformations</li>
+											<li><strong>Fine:</strong> 512x512 for residual corrections</li>
+											<li><strong>Final UV:</strong> Coarse upsampled + Fine delta</li>
+											<li><strong>Warping:</strong> Bilinear grid_sample with border padding</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="highlight-box">
+									<h4>Key Insight: Backward Warping</h4>
+									<p>The model doesn't output a rectified image—it outputs a geometric mapping called a UV grid. Conceptually: "as an output pixel, where in the input do I come from?" Differentiable unwarping is performed via backward sampling using PyTorch's <code>grid_sample</code>.</p>
+								</div>
+
+								<!-- Loss Functions -->
+								<h2 class="section-header">Progressive Loss Schedule</h2>
+
+								<p>I wanted the model to learn geometry first before worrying about detail. Introducing all losses at once caused training collapse, so I used progressive ramping:</p>
+
+								<table class="results-table">
+									<thead>
+										<tr>
+											<th>Loss</th>
+											<th>Weight</th>
+											<th>Start</th>
+											<th>Purpose</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Masked SSIM</strong></td>
+											<td>Primary</td>
+											<td>Epoch 1</td>
+											<td>Reconstruction quality on document region only</td>
+										</tr>
+										<tr>
+											<td><strong>Source Coverage</strong></td>
+											<td>0.2</td>
+											<td>Epoch 1</td>
+											<td>Prevents cropping (was a big problem initially)</td>
+										</tr>
+										<tr>
+											<td><strong>TV Smoothness</strong></td>
+											<td>0.03</td>
+											<td>Epoch 3</td>
+											<td>Penalizes sharp UV discontinuities</td>
+										</tr>
+										<tr>
+											<td><strong>UV Supervision</strong></td>
+											<td>0.1</td>
+											<td>Epoch 3</td>
+											<td>Direct supervision from GT UV maps</td>
+										</tr>
+										<tr>
+											<td><strong>Area Preservation</strong></td>
+											<td>0.02→0.2</td>
+											<td>Epoch 3</td>
+											<td>Prevents non-uniform stretching ("lumps")</td>
+										</tr>
+										<tr>
+											<td><strong>Laplacian Smoothness</strong></td>
+											<td>0.01→0.1</td>
+											<td>Epoch 3</td>
+											<td>Reduces local curvature in UV field</td>
+										</tr>
+										<tr>
+											<td><strong>Fold Prevention</strong></td>
+											<td>0.5</td>
+											<td>Epoch 6</td>
+											<td>Penalizes negative Jacobian (self-intersections)</td>
+										</tr>
+										<tr>
+											<td><strong>High-Pass Gradient</strong></td>
+											<td>0.15</td>
+											<td>Epoch 6</td>
+											<td>Preserves text edges via Sobel comparison</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<!-- Training -->
+								<h2 class="section-header">Training</h2>
+
+								<div class="image main"><img src="images/training_curves.png" alt="Training Curves" /></div>
+								<p class="image-caption">Loss and SSIM curves over 50 epochs</p>
+
+								<div class="two-column">
+									<div>
+										<h3>Training Setup</h3>
+										<ul>
+											<li><strong>Platform:</strong> Google Colab A100</li>
+											<li><strong>Batch Size:</strong> 8 (effective 16 with accumulation)</li>
+											<li><strong>Optimizer:</strong> AdamW (lr=5e-5, weight_decay=1e-2)</li>
+											<li><strong>Scheduler:</strong> Cosine Annealing</li>
+											<li><strong>Mixed Precision:</strong> FP16 with GradScaler</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Challenges</h3>
+										<ul>
+											<li>Model would "cheat" by modifying background to boost SSIM</li>
+											<li>Training collapse when introducing losses too fast</li>
+											<li>Colab crashing and losing training scripts</li>
+											<li>Limited compute budget (had to buy more credits)</li>
+										</ul>
+									</div>
+								</div>
+
+								<!-- Key Insights -->
+								<h2 class="section-header">Key Insights</h2>
+
+								<div class="highlight-box">
+									<h4>What Worked</h4>
+									<ul style="margin-bottom: 0;">
+										<li><strong>Progressive ramping is critical:</strong> Introducing all losses at once causes training collapse</li>
+										<li><strong>Masked metrics matter:</strong> Ignoring background prevents the model from cheating</li>
+										<li><strong>Residual UV is stable:</strong> Predicting offsets from identity grid trains faster than absolute coordinates</li>
+										<li><strong>3D flattening helps:</strong> Area preservation and Laplacian smoothness reduce "lumps"</li>
+									</ul>
+								</div>
+
+								<div class="highlight-box">
+									<h4>What Didn't Work</h4>
+									<ul style="margin-bottom: 0;">
+										<li><strong>Severe folding:</strong> UV field still produces local self-intersections</li>
+										<li><strong>Boundary errors:</strong> Mask inaccuracies cause UV extrapolation near edges</li>
+										<li><strong>Lumps:</strong> Couldn't fully smooth out the non-uniform stretching artifacts</li>
+									</ul>
+								</div>
+
+								<!-- Future Work -->
+								<h2 class="section-header">Unimplemented Features</h2>
+
+								<p>The following features were designed but disabled in the final config due to time constraints:</p>
+
+								<ul>
+									<li><strong>Curvature Weighted Fold Loss:</strong> Weight fold penalties by local curvature magnitude to prevent folds in high-curvature regions</li>
+									<li><strong>UV Attention Mechanism:</strong> Learnable attention weights to focus UV prediction on important regions</li>
+									<li><strong>Learnable UV Bias:</strong> Global learnable offset for UV coordinates to compensate for systematic biases</li>
+									<li><strong>Post-Warp Refinement Network:</strong> Small CNN to refine warped output and reduce artifacts</li>
+								</ul>
+
+								<!-- Reflection -->
+								<div class="highlight-box">
+									<h4>Reflection</h4>
+									<p>The model doesn't work as well as I expected, but text is semi-readable. I feel like if I had more compute power and time I would have been more successful. This project taught me a lot about geometric deep learning, the importance of loss scheduling, and the challenges of training models that predict dense coordinate fields.</p>
+								</div>
+
+								<!-- Links -->
+								<ul class="actions special">
+									<li><a href="https://github.com/mzlchou/document-unwarping" class="button large">View on GitHub</a></li>
+								</ul>
+
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section>
+								<h3>Phone</h3>
+								<p><a href="#">(610) 551-0816</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">michael.chou664040@tufts.edu</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>Template from HTML5up</li></ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

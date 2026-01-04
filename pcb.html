@@ -29,8 +29,8 @@
 						</ul>
 						<ul class="icons">
 							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
-									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-									<a href="resume.html" class="button small">Resume</a>
+							<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<a href="resume.html" class="button small">Resume</a>
 						</ul>
 					</nav>
 
@@ -40,19 +40,105 @@
 						<!-- Post -->
 							<section class="post">
 								<header class="major">
-									<h1>Wireless Greenhouse Monitoring System<br /></h1>
-									<p>In Engineers without Borders (EWB), we built a fully automated and self power sufficient on campus greenhouse. I helped build the automated watering system my freshman year. The following semester I became a technical lead and lead a group of 10+ students to create a wireless monitoring system. I am now the Vice President of Tufts EWB.</p>
-									<div class="image main"><img src="images\Greenhouse 1.jpeg" alt="" /></div>
+									<h1>Wireless Greenhouse Monitoring System</h1>
+									<p>Engineers Without Borders @ Tufts</p>
 								</header>
-								<div class="image main"><img src="images\IMG_9186.JPG" alt="" /></div>
-								<p>This is a picture of the old design (will update with a better photo)</p>
-								<p>The original design was created with parts that we previously had, such as an ESP32 devkit, and DHT22 temperature/humidity sensors.</p>
-								<p>I am upgrading the design to keep power efficiency in mind and make the design more professional. Since it was originally programmed with the Arduino IDE, there was lots of abstraction (which was good for teaching my tech group), but now using the ESP-IDF framework and a custom PCB board, I have more control over power consumption and efficiency.</p>
-								<p>This project let me practice designing PCBs with KiCad, finding correct parts on DigiKey, and reading datasheets for the design.</p>
-								<div class="image main"><img src="images\pcb.png" alt="" /></div>
-								<div class="image main"><img src="images\schematic.png" alt="" /></div>
-								<div class="image main"><img src="images\IMG_0455.JPG" alt="" /></div>
-								<p>Greenhouse Tech Leads (I'm in the middle)</p>
+
+								<!-- Greenhouse Image -->
+								<div class="image main"><img src="images/Greenhouse 1.jpeg" alt="Tufts EWB Greenhouse" /></div>
+
+								<!-- Project Summary -->
+								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
+									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Project Summary</h4>
+									<p style="font-size: 1.05rem; line-height: 1.8;">
+										In Engineers Without Borders (EWB), we built a <strong>fully automated and self-power-sufficient on-campus greenhouse</strong>. I helped build the automated watering system my freshman year. The following semester I became a <strong>technical lead</strong> and led a group of 10+ students to create a wireless monitoring system. I am now the <strong>Vice President of Tufts EWB</strong>.
+									</p>
+								</div>
+
+								<!-- Key Stats -->
+								<!-- <div class="stats-grid">
+									<div class="stat-card">
+										<div class="number">10+</div>
+										<div class="label">Students Led</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">ESP32</div>
+										<div class="label">Microcontroller</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">Arduino</div>
+										<div class="label">Prototype Framework</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">ESPIDF</div>
+										<div class="label">Upgraded Framework</div>
+									</div>
+								</div> -->
+
+								<!-- Technologies -->
+								<div class="tech-tags">
+									<span class="tech-tag">ESP32</span>
+									<span class="tech-tag">ESP-IDF</span>
+									<span class="tech-tag">KiCad</span>
+									<span class="tech-tag">PCB Design</span>
+									<span class="tech-tag">C</span>
+									<span class="tech-tag">WiFi</span>
+								</div>
+
+								<!-- Design Evolution -->
+								<h2 class="section-header">Design Evolution</h2>
+
+								<div class="two-column">
+									<div>
+										<h3>Original Design</h3>
+										<ul>
+											<li>ESP32 devkit with existing parts</li>
+											<li>DHT22 temperature/humidity sensors</li>
+											<li>Programmed with Arduino IDE</li>
+											<li>Good for teaching the tech group</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Upgraded Design</h3>
+										<ul>
+											<li>Custom PCB for professional build</li>
+											<li>ESP-IDF framework for lower-level control</li>
+											<li>Power efficiency optimizations</li>
+											<li>Better control over consumption</li>
+										</ul>
+									</div>
+								</div>
+
+								<div class="image main"><img src="images/IMG_9186.JPG" alt="Original Design" /></div>
+								<p class="image-caption">Original prototype design (will update with a better photo)</p>
+
+								<!-- PCB Design -->
+								<h2 class="section-header">Custom PCB Design</h2>
+
+								<p>I am upgrading the design to keep power efficiency in mind and make the design more professional. Since the original was programmed with the Arduino IDE, there was lots of abstraction (which was good for teaching my tech group), but now using the ESP-IDF framework and a custom PCB board, I have more control over power consumption and efficiency.</p>
+
+								<div class="highlight-box">
+									<h4>Skills Developed</h4>
+									<p>This project let me practice designing PCBs with <strong>KiCad</strong>, finding correct parts on <strong>DigiKey</strong>, and reading datasheets for the design.</p>
+								</div>
+
+								<div class="image main"><img src="images/schematic.png" alt="Circuit Schematic" /></div>
+								<p class="image-caption">Circuit schematic designed in KiCad</p>
+
+								<div class="image main"><img src="images/pcb.png" alt="PCB Layout" /></div>
+								<p class="image-caption">Custom PCB layout</p>
+
+								<!-- Team -->
+								<h2 class="section-header">Greenhouse Tech Leads</h2>
+
+								<div class="image main"><img src="images/IMG_0455.JPG" alt="Greenhouse Tech Leads" /></div>
+								<p class="image-caption">Greenhouse Tech Leads (I'm in the middle)</p>
+
+								<!-- Links -->
+								<ul class="actions special">
+									<li><a href="https://github.com/mzlchou/greenhouse-monitoring" class="button large">View on GitHub</a></li>
+								</ul>
+
 							</section>
 
 					</div>
