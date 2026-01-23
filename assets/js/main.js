@@ -254,5 +254,15 @@
 			});
 
 		}
-
+	// Auto-scroll to main content on page load
+	// $window.on('load', function() {
+	// 	window.setTimeout(function() {
+	// 		// Wait for preload animation to finish
+	// 		if ($main.length > 0) {
+	// 			$('html, body').animate({
+	// 				scrollTop: $main.offset().top
+	// 			}, 5000); // smooth scroll over 1 second
+	// 		}
+	// 	}, 500); // delay to let intro animation play briefly
+	// });
 })(jQuery);
