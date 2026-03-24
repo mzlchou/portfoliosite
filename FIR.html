@@ -1,0 +1,265 @@
+<!DOCTYPE HTML>
+<!--
+	Massively by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>63-Tap FIR Filter IC</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+ 
+		<!-- Wrapper -->
+			<div id="wrapper">
+ 
+				<!-- Header -->
+					<header id="header">
+						<a href="index.html" class="logo">Back to Portfolio</a>
+					</header>
+ 
+				<!-- Nav -->
+					<nav id="nav">
+						<ul class="links">
+							<li class="active"><a href="index.html">Michael Chou Portfolio</a></li>
+						</ul>
+						<ul class="icons">
+							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+							<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							<a href="resume.html" class="button small">Resume</a>
+						</ul>
+					</nav>
+ 
+				<!-- Main -->
+					<div id="main">
+ 
+						<!-- Post -->
+							<section class="post">
+								<header class="major">
+									<h1>63-Tap FIR Filter IC</h1>
+									<p>Full Custom Digital IC Design in TSMC N16 Process</p>
+								</header>
+ 
+								<!-- Personal Connection -->
+								<p>This project gave me a ground up understanding of how digital designs actually become silicon, moving beyond RTL and synthesis into the real world of floorplanning, routing, and timing closure. Seeing a filter I designed show up as a real layout with metal layers, power stripes, and a clock tree made the entire IC design flow feel real for the first time.</p>
+ 
+								<!-- Project Summary -->
+								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
+									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Project Summary</h4>
+									<p style="font-size: 1.05rem; line-height: 1.8;">
+										Designed and implemented a <strong>63-tap FIR filter macro block</strong> through the complete IC design flow, from RTL to physical layout. The design was synthesized in <strong>Cadence Genus</strong> using a clock-gated, multi-Vth (LVT) architecture targeting TSMC N16, then taken through the full backend flow in <strong>Cadence Innovus</strong> — including floorplanning, placement, clock tree synthesis, routing, and signoff. Final deliverables include Verilog, LEF, LIB, and DEF views for SoC integration.
+									</p>
+								</div>
+ 
+								<!-- Key Stats -->
+								<div class="stats-grid">
+									<div class="stat-card">
+										<div class="number">1.724</div>
+										<div class="label">GHz Clock</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">2207</div>
+										<div class="label">µm² Area</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">7.6</div>
+										<div class="label">mW Power</div>
+									</div>
+									<div class="stat-card">
+										<div class="number">N16</div>
+										<div class="label">Process Node</div>
+									</div>
+								</div>
+ 
+								<!-- Technologies -->
+								<div class="tech-tags">
+									<span class="tech-tag">Cadence Genus</span>
+									<span class="tech-tag">Cadence Innovus</span>
+									<span class="tech-tag">TSMC N16</span>
+									<span class="tech-tag">Verilog</span>
+									<span class="tech-tag">Clock Gating</span>
+									<span class="tech-tag">Multi-Vth</span>
+									<span class="tech-tag">Static Timing Analysis</span>
+									<span class="tech-tag">Place & Route</span>
+								</div>
+ 
+								<!-- Architecture Overview -->
+								<h2 class="section-header">Filter Architecture</h2>
+ 
+								<p>The design went through two architectural iterations before synthesis, targeting a more hardware efficient implementation.</p>
+ 
+								<h3>Direct-Form FIR</h3>
+								<div class="image main"><img src="images/FIR_original.png" alt="Direct-Form FIR Filter Block Diagram" /></div>
+								<p class="image-caption">Initial direct form architecture: input shift register with per-tap coefficient multipliers and accumulation chain</p>
+ 
+								<p>The initial design followed the standard direct form FIR structure where a shift register delays the input signal x[n] by one sample per tap, each delayed sample is multiplied by its corresponding filter coefficient h[k], and all products are summed to produce the output y[n]. While straightforward and great for simulation, this requires a unique multiplier for every one of the 63 taps, making it expensive in area and power.</p>
+ 
+								<h3>Optimized Folded Architecture</h3>
+								<div class="image main"><img src="images/FIR_new.png" alt="Folded Symmetric FIR Filter Block Diagram" /></div>
+								<p class="image-caption">Optimized folded architecture: symmetric coefficients allow inputs sharing the same weight to be pre-summed, cutting multiplier count nearly in half</p>
+ 
+								<p>Since the FIR filter has a symmetric impulse response, coefficients appear in mirrored pairs: h[0]=h[62], h[1]=h[61], and so on. This means two input samples always share the same coefficient, so they can be <strong>pre-added before the multiply</strong>. This folded architecture reduces the number of multipliers from 63 to 32, significantly cutting area and power. Pipelining registers were also added to shorten the critical path length and enable the higher clock frequency target.</p>
+ 
+								<!-- Design Choices Table -->
+								<table class="results-table">
+									<thead>
+										<tr>
+											<th>Design Choice</th>
+											<th>Selection</th>
+											<th>Rationale</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Cell Library</strong></td>
+											<td>LVT (Low Voltage Threshold)</td>
+											<td>Faster switching to meet 0.58 ns timing target</td>
+										</tr>
+										<tr>
+											<td><strong>Clock Strategy</strong></td>
+											<td>Clock Gating (ICG cells)</td>
+											<td>Reduces dynamic switching power in idle registers</td>
+										</tr>
+										<tr>
+											<td><strong>Core Utilization</strong></td>
+											<td>75%</td>
+											<td>Balances routing density and die area</td>
+										</tr>
+										<tr>
+											<td><strong>Supply Voltage</strong></td>
+											<td>0.72 V (SS corner)</td>
+											<td>Worst-case process/voltage/temperature signoff</td>
+										</tr>
+									</tbody>
+								</table>
+ 
+								<!-- Backend Flow -->
+								<h2 class="section-header">Backend Implementation Flow</h2>
+ 
+								<p>The complete backend flow was executed in Cadence Innovus, with each stage building on the previous checkpoint:</p>
+ 
+								<div class="two-column">
+									<div>
+										<h3>Physical Implementation</h3>
+										<ul>
+											<li><strong>Floorplanning:</strong> Defined core area aligned to technology grid, with 6.48 µm IO padding on all sides</li>
+											<li><strong>Placement:</strong> Standard cell placement with timing-driven optimization</li>
+											<li><strong>Clock Tree Synthesis:</strong> Balanced clock distribution to minimize skew across 4531 instances</li>
+											<li><strong>Routing:</strong> Global and detailed routing, DRC clean</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Timing Closure</h3>
+										<ul>
+											<li><strong>Setup analysis:</strong> Identified critical paths through MAC accumulator output registers</li>
+											<li><strong>Hold ECO:</strong> Post-route buffer insertion on clock-gated CDN paths</li>
+											<li><strong>Constraint tuning:</strong> Reduced holdTargetSlack from 0.07 to 0.01 ns to free setup margin, and included setupTargetSlack to 0.005 to meet setup constraints</li>
+											<li><strong>Signoff:</strong> Final STA with no timing violations</li>
+										</ul>
+									</div>
+								</div>
+ 
+								<!-- Verification -->
+								<h2 class="section-header">Verification</h2>
+ 
+								<p>Prior to synthesis, the RTL design was verified functionally using <strong>Icarus Verilog 12.0</strong> on <strong>EDA Playground</strong>. Testbenches were written to validate the filter impulse response and confirm correct MAC accumulation across all 63 taps before moving to the backend flow.</p>
+ 
+								<div class="highlight-box">
+									<h4>A Quick Note</h4>
+									<p>Due to the proprietary nature of the PDK and EDA tool scripts used in this project, specific implementation details like the cell library parameters, technology files, and backend scripts cannot be shared publicly. The results and methodology described here reflect the overall flow without disclosing confidential process information.</p>
+								</div>
+ 
+								<!-- Final Results -->
+								<h2 class="section-header">Final Signoff Results</h2>
+ 
+								<table class="results-table">
+									<thead>
+										<tr>
+											<th>Metric</th>
+											<th>Synthesis</th>
+											<th>Post-Layout Signoff</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><strong>Clock Period</strong></td>
+											<td>0.58 ns (1.724 GHz)</td>
+											<td>0.58 ns (1.724 GHz)</td>
+										</tr>
+										<tr>
+											<td><strong>Cell Area</strong></td>
+											<td>2173.120 µm²</td>
+											<td>2207.192 µm²</td>
+										</tr>
+										<tr>
+											<td><strong>Total Power</strong></td>
+											<td>0.097 mW (VCD)</td>
+											<td>7.603 mW (vectorless)</td>
+										</tr>
+										<tr>
+											<td><strong>Worst Setup Slack</strong></td>
+											<td>Met (0.000 ns)</td>
+											<td>Met (0.000 ns)</td>
+										</tr>
+										<tr>
+											<td><strong>Worst Hold Slack</strong></td>
+											<td>Met (0.000 ns)</td>
+											<td>Met (0.000 ns)</td>
+										</tr>
+										<tr>
+											<td><strong>Cell Instances</strong></td>
+											<td>--</td>
+											<td>4531</td>
+										</tr>
+									</tbody>
+								</table>
+ 
+								<!-- Key Takeaways -->
+								<h2 class="section-header">Key Takeaway</h2>
+ 
+								<div class="highlight-box">
+									<h4>Synthesis Optimism vs. Physical Reality</h4>
+									<p>The biggest lesson from this project was understanding the gap between synthesis and physical implementation. Paths that closed timing comfortably in Genus violated after routing, because synthesis uses wire load models that significantly underestimate real interconnect delay. Closing that gap required iterating on constraints, utilization, and post-route ECO - the same process used in real ASIC tapeout flows.</p>
+								</div>
+ 
+							</section>
+ 
+					</div>
+ 
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section>
+								<h3>Phone</h3>
+								<p><a href="#">(610) 551-0816</a></p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="#">michael.chou664040@tufts.edu</a></p>
+							</section>
+							<section>
+								<h3>Social</h3>
+								<ul class="icons alt">
+									<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+ 
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul><li>Template from HTML5up</li></ul>
+					</div>
+ 
+			</div>
+ 
+		<!-- Scripts -->
+			<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<sc
