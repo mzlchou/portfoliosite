@@ -41,48 +41,94 @@
 							<section class="post">
 								<header class="major">
 									<h1>Malawi Water Tank Level Tracker</h1>
-									<p>Engineers Without Borders @ Tufts</p>
+									<p>Engineers Without Borders @ Tufts - Custom PCB</p>
 								</header>
 
 								<!-- Main Image -->
-								<div class="image main"><img src="images/malawi.jpg" alt="Malawi Water Tank Project" /></div>
-
+								<div class="image main"><img src="images/finaltop.jpeg" alt="Custom tank monitor PCB" /></div>
 								<!-- Project Summary -->
 								<div class="highlight-box" style="background: linear-gradient(135deg, rgba(24, 191, 239, 0.15) 0%, rgba(24, 191, 239, 0.05) 100%); border-left: 4px solid #18bfef; margin: 2rem 0;">
 									<h4 style="font-size: 1.3rem; margin-bottom: 1rem;">Project Summary</h4>
 									<p style="font-size: 1.05rem; line-height: 1.8;">
-										This project is for the community we partner with in Malawi through Tufts Engineers Without Borders. I led a project for <strong>measuring water level in a tank and sending the data to the United States for remote monitoring via cellular</strong>. The device is solar powered, charging a battery that powers our ESP32C3 microcontroller and Blues cellular unit.
+										This project is for the community we partner with in Malawi through Tufts Engineers Without Borders. With <a href="https://www.linkedin.com/in/andrew-schretzmayer/">Andrew Schretzmayer</a>, we led the design of a device that <strong>measures the water level in a tank and sends the data to the United States for remote monitoring over cellular</strong>. What began as a breadboard prototype has since been redesigned into a <strong>custom 4 layer PCB</strong>, a battery powered ESP32-C3 microcontroller and Blues cellular module on a single board, engineered for long-term, unattended deployment in the field.
 									</p>
 								</div>
-
-								<!-- Key Stats -->
-								<!-- <div class="stats-grid">
-									<div class="stat-card">
-										<div class="number">24</div>
-										<div class="label">Readings/Day</div>
-									</div>
-									<div class="stat-card">
-										<div class="number">Solar</div>
-										<div class="label">Powered</div>
-									</div>
-									<div class="stat-card">
-										<div class="number">Cellular</div>
-										<div class="label">Data Transfer</div>
-									</div>
-									<div class="stat-card">
-										<div class="number">Remote</div>
-										<div class="label">Monitoring</div>
-									</div>
-								</div> -->
-
+								<span class="image fit"><img src="images\schematicmalawi.png" alt="Schematic" /></span>
+								<span class="image fit"><img src="images\layoutmalawi.png" alt="Layout" /></span>
 								<!-- Technologies -->
 								<div class="tech-tags">
-									<span class="tech-tag">ESP32C3</span>
+									<span class="tech-tag">KiCad</span>
+									<span class="tech-tag">ESP32-C3</span>
 									<span class="tech-tag">Blues Notecard</span>
 									<span class="tech-tag">Ultrasonic Sensor</span>
-									<span class="tech-tag">Solar Power</span>
-									<span class="tech-tag">SD Card</span>
-									<span class="tech-tag">HTTP</span>
+									<span class="tech-tag">LiFePO4 Battery</span>
+									<span class="tech-tag">ESP-IDF Firmware</span>
+								</div>
+
+								<!-- From Prototype to PCB -->
+								<h2 class="section-header">From Prototype to Custom PCB</h2>
+
+								<p>
+									The first working version of this system lived on a breadboard: an ESP32-C3 dev kit wired to an
+									ultrasonic sensor, a Blues Notecard on its Notecarrier, and an SD card module for local storage.
+									That prototype proved the concept&mdash;take a reading, store it, and upload over cellular&mdash;but
+									it was fragile, bulky, and not something you could leave running unattended in Malawi for months.
+									The next step was to consolidate everything into a single, robust, purpose-built board.
+								</p>
+
+								<div class="two-column">
+									<div>
+										<h3>Original (Breadboard Prototype)</h3>
+										<span class="image fit"><img src="images/labeledmalawi.png" alt="Original breadboard prototype" /></span>
+										<ul>
+											<li>ESP32-C3 dev kit + jumper wires</li>
+											<li>Separate SD card module for storage</li>
+											<li>Notecarrier dev board for cellular</li>
+											<li>Great for iteration, not for deployment</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Current (Custom PCB)</h3>
+										<span class="image fit"><img src="images\PCBmalawifinal.png" alt="Current custom 4-layer PCB" /></span>
+										<ul>
+											<li>Single 70 &times; 74 mm 4-layer board</li>
+											<li>On-board power regulation and storage</li>
+											<li>Integrated connectors for sensor, battery, and Notecard</li>
+											<li>Designed for unattended, long-term operation</li>
+										</ul>
+									</div>
+								</div>
+
+								<!-- PCB Design -->
+								<h2 class="section-header">PCB Design</h2>
+
+								<p>
+									The board was designed from scratch in <strong>KiCad</strong> as a four-layer stackup: signal layers
+									on top and bottom, with two internal ground planes that sit directly beneath the switching regulators.
+									Those ground planes keep return paths short and quiet&mdash;important because the cellular modem and the
+									buck converters are both noisy, and the ESP32-C3's radio is sensitive. The board carries the
+									microcontroller, dual power supplies, the cellular interface, and all field connectors on a single
+									footprint roughly the size of a credit card.
+								</p>
+								<span class="image fit"><img src="images\nakedpcb.png" alt="Board with no components" /></span>
+								<div class="two-column">
+									<div>
+										<h3>Power Subsystem</h3>
+										<ul>
+											<li>12.8V LiFePO4 battery input</li>
+											<li>Dual AP64500 synchronous buck converters</li>
+											<li>Independent 5V (Notecard) and 3.3V (ESP32) rails</li>
+											<li>Bulk capacitance to ride through cellular current bursts</li>
+										</ul>
+									</div>
+									<div>
+										<h3>Timekeeping &amp; Sleep</h3>
+										<ul>
+											<li>External 32.768 kHz crystal for an accurate RTC</li>
+											<li>Deep sleep between hourly readings (~microamps)</li>
+											<li>Readings held in RTC memory across sleep cycles</li>
+										</ul>
+									</div>
 								</div>
 
 								<!-- How It Works -->
@@ -93,75 +139,92 @@
 										<h3>Data Collection</h3>
 										<ul>
 											<li>Ultrasonic sensor measures tank water level</li>
-											<li>ESP32 takes readings once per hour</li>
-											<li>24 readings stored daily on SD card</li>
+											<li>ESP32-C3 wakes and takes a reading once per hour</li>
+											<li>Readings stored in RTC memory through deep sleep</li>
 										</ul>
 									</div>
 									<div>
 										<h3>Data Transmission</h3>
 										<ul>
-											<li>End of day: file sent via serial to Blues Notecard</li>
+											<li>Once a day, the day's readings are sent to the Blues Notecard</li>
 											<li>Cellular upload to Blues Notehub</li>
-											<li>Routed to HTTP endpoint on our website</li>
+											<li>Routed to our endpoint for remote monitoring in the U.S.</li>
 										</ul>
 									</div>
 								</div>
 
 								<div class="highlight-box">
 									<h4>Why Blues?</h4>
-									<p>We chose Blues because they guaranteed that the cellular signal works in both the <strong>United States</strong> (for testing) and <strong>Malawi</strong> (for implementation), in addition to the interface being easy to use.</p>
+									<p>We chose Blues because their global cellular coverage works in both the <strong>United States</strong> (for testing) and <strong>Malawi</strong> (for deployment), and because the Notecard stores data in its own flash before transmitting, so a reading is never lost even if a connection drops mid-upload.</p>
 								</div>
 
 								<!-- Hardware -->
-								<h2 class="section-header">Hardware Components</h2>
-
-								<div class="image main"><img src="images/labeledmalawi.png" alt="Labeled Device Components" /></div>
-								<p class="image-caption">Device internals exposed for EWB showcase</p>
+								<h2 class="section-header">Main Hardware Components</h2>
 
 								<table class="results-table">
 									<thead>
 										<tr>
-											<th>Label</th>
+											<th>#</th>
 											<th>Component</th>
 											<th>Purpose</th>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
-											<td><strong>A</strong></td>
-											<td>ESP32C3</td>
+											<td><strong>1</strong></td>
+											<td>ESP32-C3-WROOM-02</td>
 											<td>Main microcontroller</td>
 										</tr>
 										<tr>
-											<td><strong>B</strong></td>
-											<td>SD Card Module</td>
-											<td>Local data storage</td>
+											<td><strong>2</strong></td>
+											<td>Dual AP64500 Buck Converters</td>
+											<td>5V and 3.3V power rails from the 12.8V battery</td>
 										</tr>
 										<tr>
-											<td><strong>C</strong></td>
-											<td>Ultrasonic Sensor</td>
-											<td>Water level measurement (mounted at bottom)</td>
+											<td><strong>3</strong></td>
+											<td>Ultrasonic Sensor (via JST connector)</td>
+											<td>Water level measurement</td>
 										</tr>
 										<tr>
-											<td><strong>D</strong></td>
+											<td><strong>4</strong></td>
 											<td>Blues Notecard</td>
 											<td>Cellular communication</td>
+										</tr>
+										<tr>
+											<td><strong>5</strong></td>
+											<td>32.768 kHz Crystal</td>
+											<td>Accurate real-time clock for deep-sleep timing</td>
 										</tr>
 									</tbody>
 								</table>
 
+								<!-- Bringing It Up -->
+								<h2 class="section-header">Bring-Up &amp; Field Hardening</h2>
+
+								<p>
+									Getting the first boards working meant solving real hardware problems. The most stubborn was a
+									power issue during cellular transmission: the modem draws a large current burst when it registers
+									on the network, which would momentarily collapse the supply and reset the cellular module. Diagnosing
+									it required isolating whether the source, the wiring, the connectors, or the board itself was the
+									culprit&mdash;and ultimately came down to the transient current demand of the cellular registration.
+									The fix combined <strong>bulk capacitance to buffer the current bursts</strong> with a
+									<strong>firmware retry routine that self-recovers</strong> without any manual intervention. The
+									firmware was also reworked so routine hourly wakes read time from the Notecard's onboard clock
+									instead of waking the cellular modem, dramatically reducing power draw.
+								</p>
+
 								<!-- Future Work -->
-								<h2 class="section-header">Future Work</h2>
+								<h2 class="section-header">Conclusion</h2>
 
 								<div class="highlight-box">
-									<h4>Future Proofing</h4>
-									<p>The current prototype uses a breadboard for rapid iteration. Next steps include moving to a <strong>protoboard or custom PCB</strong> for a more robust, long-term deployment in Malawi.</p>
+									<h4>Final Implementation Note</h4>
+									<p>When we implement the system in Malawi, we hope that everything works as expected and provides valuable insights into water usage patterns.</p>
 								</div>
 
 								<!-- Links -->
-								<!-- <ul class="actions special">
-									<li><a href="https://github.com/mzlchou/malawi-water-tracker" class="button large">View on GitHub</a></li>
-								</ul> -->
+								<ul class="actions special">
+									<li><a href="https://github.com/Ajsbreezy/EWB_Sensor_SP26" class="button large">View on GitHub</a></li>
+								</ul>
 
 							</section>
 

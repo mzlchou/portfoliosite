@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>RISC-V CPU with Vector Extension IC</title>
+		<title>RISC-V RV32I Processor — RTL to GDSII</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -30,7 +30,7 @@
 						<ul class="icons">
 							<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
 							<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-							<a href="resume.html" class="button small">Resume</a>
+							<li><a href="resume.html" class="button small">Resume</a></li>
 						</ul>
 					</nav>
 
@@ -40,9 +40,223 @@
 						<!-- Post -->
 							<section class="post">
 								<header class="major">
-									<h1>RISC-V CPU with Vector Extension IC</h1>
-									<p>In Progress...</p>
+									<h1>RISC-V RV32I Processor<br />
+									RTL to GDSII</h1>
+									<p>A 32-bit RISC-V RV32I processor designed in SystemVerilog and taken
+									through the complete ASIC design flow — from RTL and functional
+									verification, through synthesis, to a fully placed-and-routed layout on a
+									16&nbsp;nm PDK.</p>
 								</header>
+
+							<!-- To add the chip layout image, drop the file in images/ and uncomment:
+								<span class="image main"><img src="images/rv32i_layout.png" alt="Final placed-and-routed RV32I layout" /></span>
+							-->
+
+								<ul class="actions">
+									<li><a href="https://github.com/connortufts/rvv" class="button primary icon brands fa-github">View on GitHub</a></li>
+								</ul>
+
+								<h2>Overview</h2>
+								<p>This project, built for a graduate digital&nbsp;IC design course, implements
+								the base integer subset of the RISC-V instruction set (RV32I) as a
+								single-cycle processor and carries it end to end through a modern ASIC flow.
+								The goal was less about microarchitectural performance and more about
+								experiencing the full path a real chip takes: register-transfer-level (RTL)
+								design, functional verification, logic synthesis, and the complete physical
+								implementation flow down to a GDSII layout. The design was implemented on a
+								16&nbsp;nm process design kit using industry-standard Cadence tools, with the
+								flow automated through TCL and Makefiles. It was a five-person team effort
+								(Connor Bremner, Weston Nguyen, Devon Kumar, Brian Liau, and myself); my
+								contributions centered on the arithmetic logic unit, the AHB bus interface
+								work, and the physical-implementation flow.</p>
+
+								<h2>Architecture</h2>
+								<p>The core is a non-pipelined, single-cycle datapath: every instruction
+								completes in one clock cycle, flowing combinationally from instruction fetch
+								through decode, register read, execute, memory access, and write-back. Only the
+								program counter, register file, and data memory update on the clock edge. The
+								design is built from small, independently verified SystemVerilog modules:</p>
+								<ul>
+									<li><strong>Program Counter</strong> — increments by four or loads a
+									branch/jump target computed by the ALU.</li>
+									<li><strong>Instruction Decoder</strong> — a purely combinational control
+									unit that extracts register fields and generates every control signal,
+									exploiting the RV32I encoding so the <code>funct3</code> field maps
+									directly onto the ALU operation.</li>
+									<li><strong>Immediate Generator</strong> — reassembles and sign-extends
+									immediates across all six RISC-V instruction formats.</li>
+									<li><strong>Register File</strong> — 32&nbsp;&times;&nbsp;32-bit registers
+									with two combinational read ports and a synchronous write port, with
+									<code>x0</code> hardwired to zero.</li>
+									<li><strong>Arithmetic Logic Unit</strong> — eight operations (add/sub,
+									shifts, comparisons, and bitwise logic) reused for arithmetic, address
+									calculation, and branch-target computation.</li>
+									<li><strong>Load/Store Unit</strong> — drives memory control signals and
+									performs byte/halfword/word extraction with correct signed and unsigned
+									sign extension.</li>
+								</ul>
+								<p>A deliberate design choice was to reuse the single ALU for all addition —
+								data-path arithmetic, memory address calculation, and PC-relative
+								branch/jump targets — with operand multiplexers selecting between the program
+								counter, register values, the zero register, and immediates.</p>
+
+								<h2>Verification</h2>
+								<p>Correctness was established bottom-up. Each module was first validated in
+								isolation with its own self-checking testbench, then the integrated processor
+								was exercised with full instruction sequences at the system level.
+								Verification used C++ testbenches compiled and simulated through Verilator,
+								giving fast, cycle-accurate simulation. Proving each block correct before
+								integration kept later debugging focused on wiring and interaction rather than
+								block-level logic.</p>
+
+								<h2>RTL-to-GDSII Flow</h2>
+								<p>Once functionally verified, the design was synthesized into a gate-level
+								netlist with Cadence Genus and then physically implemented with Cadence
+								Innovus. The backend flow covered the complete sequence of physical-design
+								stages:</p>
+								<ul>
+									<li><strong>Floorplanning</strong> — defining the core area, margins, and
+									standard-cell rows.</li>
+									<li><strong>Power planning</strong> — building a hierarchical VDD/VSS power
+									mesh across the metal stack to deliver current with minimal IR drop.</li>
+									<li><strong>Placement</strong> — legalizing every standard cell into rows
+									with timing- and wirelength-driven optimization.</li>
+									<li><strong>Clock tree synthesis</strong> — constructing a balanced buffer
+									tree so the clock reaches all sequential elements with minimal skew,
+									followed by hold-time fixing.</li>
+									<li><strong>Routing</strong> — connecting all signals across the metal
+									layers within the design rules, with no routing congestion.</li>
+									<li><strong>Signoff</strong> — final timing, design-rule, and parasitic
+									checks on the routed layout before GDSII export.</li>
+								</ul>
+								<p>Timing was verified across multiple corners (multi-mode multi-corner
+								analysis), checking setup at the slow corner and hold at the fast corner. The
+								flow closed with positive setup and hold slack and zero timing violations.</p>
+
+								<h2>Results</h2>
+								<div class="table-wrapper">
+									<table>
+										<thead>
+											<tr>
+												<th>Metric</th>
+												<th>Post-synthesis</th>
+												<th>Post-route (signoff)</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Process / PDK</td>
+												<td colspan="2">16&nbsp;nm</td>
+											</tr>
+											<tr>
+												<td>Target frequency</td>
+												<td colspan="2">50&nbsp;MHz (20&nbsp;ns period)</td>
+											</tr>
+											<tr>
+												<td>Total area</td>
+												<td>21,496&nbsp;&micro;m&sup2;</td>
+												<td>23,652&nbsp;&micro;m&sup2;</td>
+											</tr>
+											<tr>
+												<td>Total power</td>
+												<td>1.33&nbsp;mW</td>
+												<td>2.21&nbsp;mW</td>
+											</tr>
+											<tr>
+												<td>Timing</td>
+												<td colspan="2">Positive setup &amp; hold slack — no violations</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<p>The area is dominated by memory: the data memory was implemented as a
+								register array rather than a compiled SRAM macro, so the bulk of the
+								~9,200 flip-flops in the design are memory storage. This made the layout
+								memory-dominated and the utilization intentionally low — a useful, concrete
+								illustration of how an architectural choice (flop-based memory versus an SRAM
+								macro) propagates directly into area, power, and clock-tree size.</p>
+
+								<h2>Bus Interface (AHB-Lite)</h2>
+								<p>Alongside the directly-integrated design, I designed and simulated an
+								AHB-Lite (AMBA) bus interface for a more realistic memory architecture, with
+								the CPU acting as the bus master and instruction and data memory as separate
+								slaves connected through an AHB interconnect. This required a master-side
+								finite-state machine that bridges the single-cycle core to the bus's
+								two-phase, wait-state protocol — stalling the core across the multi-cycle
+								transaction and capturing read data the moment it becomes valid — and a
+								subordinate wrapper that translates the AHB handshake into a simple
+								enable/address/data interface for the memory.</p>
+
+								<h2>Scope &amp; Outcome</h2>
+								<p>Initial goals also included pipelining, the RISC-V vector extension (RVV),
+								and bus-based memory. As the project progressed, the vector hardware and the
+								bus-connected memory introduced verification and physical-design complexity
+								that put a clean signoff at risk within the project timeline. To guarantee a
+								complete, verifiable end-to-end implementation, the final taped-out design was
+								scoped to the non-pipelined RV32I core with directly-integrated memory; the
+								AHB bus was designed and verified in simulation but not carried into the final
+								physical build. The result is a functional RV32I processor implemented through
+								the entire flow from RTL to GDSII, with the design trade-offs in area, power,
+								and timing explored and documented along the way.</p>
+
+								<h2>Tools &amp; Skills</h2>
+								<ul>
+									<li><strong>Languages:</strong> SystemVerilog, C++, TCL</li>
+									<li><strong>Verification:</strong> Verilator (cycle-accurate simulation)</li>
+									<li><strong>Synthesis:</strong> Cadence Genus</li>
+									<li><strong>Place &amp; Route:</strong> Cadence Innovus</li>
+									<li><strong>Concepts:</strong> single-cycle datapath &amp; control, RV32I
+									ISA, multi-mode multi-corner timing, clock tree synthesis, power-mesh
+									design, AMBA AHB-Lite bus protocol</li>
+								</ul>
+
+								<ul class="actions">
+									<li><a href="https://github.com/connortufts/rvv" class="button primary icon brands fa-github">View on GitHub</a></li>
+									<li><a href="index.html" class="button">Back to Portfolio</a></li>
+								</ul>
+
+							</section>
+
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<section class="split contact">
+							<section class="alt">
+								<h3>Location</h3>
+								<p>Medford, MA</p>
+							</section>
+							<section>
+								<h3>Email</h3>
+								<p><a href="mailto:michael.chou664040@tufts.edu">michael.chou664040@tufts.edu</a></p>
+							</section>
+							<section>
+								<h3>Links</h3>
+								<ul class="icons alt">
+									<li><a href="https://www.linkedin.com/in/michaelzchou/" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+									<li><a href="https://github.com/mzlchou" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								</ul>
+							</section>
+						</section>
+					</footer>
+
+				<!-- Copyright -->
+					<div id="copyright">
+						<ul class="menu">
+							<li>&copy; Michael Chou</li><li>Design: <a href="https://html5up.net">HTML5 UP</a></li>
+						</ul>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
 
 	</body>
 </html>
