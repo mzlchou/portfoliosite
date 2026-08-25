@@ -45,30 +45,30 @@
 									<p>A 32-bit RISC-V RV32I processor designed in SystemVerilog and taken
 									through the complete ASIC design flow — from RTL and functional
 									verification, through synthesis, to a fully placed-and-routed layout on a
-									16&nbsp;nm PDK.</p>
+									16nm PDK.</p>
 								</header>
 
 							<!-- To add the chip layout image, drop the file in images/ and uncomment:
 								<span class="image main"><img src="images/rv32i_layout.png" alt="Final placed-and-routed RV32I layout" /></span>
 							-->
 
-								<ul class="actions">
+								<!-- <ul class="actions">
 									<li><a href="https://github.com/connortufts/rvv" class="button primary icon brands fa-github">View on GitHub</a></li>
-								</ul>
+								</ul> -->
 
 								<h2>Overview</h2>
-								<p>This project, built for a graduate digital&nbsp;IC design course, implements
+								<p>This project, built for a digital IC design course, implements
 								the base integer subset of the RISC-V instruction set (RV32I) as a
 								single-cycle processor and carries it end to end through a modern ASIC flow.
 								The goal was less about microarchitectural performance and more about
 								experiencing the full path a real chip takes: register-transfer-level (RTL)
 								design, functional verification, logic synthesis, and the complete physical
 								implementation flow down to a GDSII layout. The design was implemented on a
-								16&nbsp;nm process design kit using industry-standard Cadence tools, with the
+								16nm process design kit using industry-standard Cadence tools, with the
 								flow automated through TCL and Makefiles. It was a five-person team effort
 								(Connor Bremner, Weston Nguyen, Devon Kumar, Brian Liau, and myself); my
-								contributions centered on the arithmetic logic unit, the AHB bus interface
-								work, and the physical-implementation flow.</p>
+								contributions centered on the arithmetic logic unit, verification on the individual modules, and the AHB bus interface
+								work.</p>
 
 								<h2>Architecture</h2>
 								<p>The core is a non-pipelined, single-cycle datapath: every instruction
@@ -77,35 +77,36 @@
 								program counter, register file, and data memory update on the clock edge. The
 								design is built from small, independently verified SystemVerilog modules:</p>
 								<ul>
-									<li><strong>Program Counter</strong> — increments by four or loads a
+									<li><strong>Program Counter</strong> - increments by four or loads a
 									branch/jump target computed by the ALU.</li>
-									<li><strong>Instruction Decoder</strong> — a purely combinational control
+									<li><strong>Instruction Decoder</strong> - a purely combinational control
 									unit that extracts register fields and generates every control signal,
-									exploiting the RV32I encoding so the <code>funct3</code> field maps
+									exploiting the RV32I encoding so the "funct3" field maps
 									directly onto the ALU operation.</li>
-									<li><strong>Immediate Generator</strong> — reassembles and sign-extends
+									<li><strong>Immediate Generator</strong> - reassembles and sign-extends
 									immediates across all six RISC-V instruction formats.</li>
-									<li><strong>Register File</strong> — 32&nbsp;&times;&nbsp;32-bit registers
+									<li><strong>Register File</strong> - 32 x 32-bit registers
 									with two combinational read ports and a synchronous write port, with
 									<code>x0</code> hardwired to zero.</li>
-									<li><strong>Arithmetic Logic Unit</strong> — eight operations (add/sub,
+									<li><strong>Arithmetic Logic Unit</strong> - eight operations (add/sub,
 									shifts, comparisons, and bitwise logic) reused for arithmetic, address
 									calculation, and branch-target computation.</li>
-									<li><strong>Load/Store Unit</strong> — drives memory control signals and
+									<li><strong>Load/Store Unit</strong> - drives memory control signals and
 									performs byte/halfword/word extraction with correct signed and unsigned
 									sign extension.</li>
 								</ul>
-								<p>A deliberate design choice was to reuse the single ALU for all addition —
+								<p>A deliberate design choice was to reuse the single ALU for all addition -
 								data-path arithmetic, memory address calculation, and PC-relative
-								branch/jump targets — with operand multiplexers selecting between the program
+								branch/jump targets - with operand multiplexers selecting between the program
 								counter, register values, the zero register, and immediates.</p>
 
 								<h2>Verification</h2>
-								<p>Correctness was established bottom-up. Each module was first validated in
+								<p>Each module was first validated in
 								isolation with its own self-checking testbench, then the integrated processor
 								was exercised with full instruction sequences at the system level.
 								Verification used C++ testbenches compiled and simulated through Verilator,
-								giving fast, cycle-accurate simulation. Proving each block correct before
+								giving fast, cycle-accurate simulation. It was also nice to learn a different tool for
+								verification. Proving each block correct before
 								integration kept later debugging focused on wiring and interaction rather than
 								block-level logic.</p>
 
@@ -115,18 +116,18 @@
 								Innovus. The backend flow covered the complete sequence of physical-design
 								stages:</p>
 								<ul>
-									<li><strong>Floorplanning</strong> — defining the core area, margins, and
+									<li><strong>Floorplanning</strong> - defining the core area, margins, and
 									standard-cell rows.</li>
-									<li><strong>Power planning</strong> — building a hierarchical VDD/VSS power
+									<li><strong>Power planning</strong> - building a hierarchical VDD/VSS power
 									mesh across the metal stack to deliver current with minimal IR drop.</li>
-									<li><strong>Placement</strong> — legalizing every standard cell into rows
+									<li><strong>Placement</strong> - legalizing every standard cell into rows
 									with timing- and wirelength-driven optimization.</li>
-									<li><strong>Clock tree synthesis</strong> — constructing a balanced buffer
+									<li><strong>Clock tree synthesis</strong> - constructing a balanced buffer
 									tree so the clock reaches all sequential elements with minimal skew,
 									followed by hold-time fixing.</li>
-									<li><strong>Routing</strong> — connecting all signals across the metal
+									<li><strong>Routing</strong> - connecting all signals across the metal
 									layers within the design rules, with no routing congestion.</li>
-									<li><strong>Signoff</strong> — final timing, design-rule, and parasitic
+									<li><strong>Signoff</strong> - final timing, design-rule, and parasitic
 									checks on the routed layout before GDSII export.</li>
 								</ul>
 								<p>Timing was verified across multiple corners (multi-mode multi-corner
@@ -146,11 +147,11 @@
 										<tbody>
 											<tr>
 												<td>Process / PDK</td>
-												<td colspan="2">16&nbsp;nm</td>
+												<td colspan="2">16nm</td>
 											</tr>
 											<tr>
 												<td>Target frequency</td>
-												<td colspan="2">50&nbsp;MHz (20&nbsp;ns period)</td>
+												<td colspan="2">50MHz (20ns period)</td>
 											</tr>
 											<tr>
 												<td>Total area</td>
@@ -172,20 +173,23 @@
 								<p>The area is dominated by memory: the data memory was implemented as a
 								register array rather than a compiled SRAM macro, so the bulk of the
 								~9,200 flip-flops in the design are memory storage. This made the layout
-								memory-dominated and the utilization intentionally low — a useful, concrete
+								memory-dominated and the utilization intentionally low - a useful, concrete
 								illustration of how an architectural choice (flop-based memory versus an SRAM
 								macro) propagates directly into area, power, and clock-tree size.</p>
 
 								<h2>Bus Interface (AHB-Lite)</h2>
-								<p>Alongside the directly-integrated design, I designed and simulated an
-								AHB-Lite (AMBA) bus interface for a more realistic memory architecture, with
-								the CPU acting as the bus master and instruction and data memory as separate
-								slaves connected through an AHB interconnect. This required a master-side
-								finite-state machine that bridges the single-cycle core to the bus's
-								two-phase, wait-state protocol — stalling the core across the multi-cycle
-								transaction and capturing read data the moment it becomes valid — and a
-								subordinate wrapper that translates the AHB handshake into a simple
-								enable/address/data interface for the memory.</p>
+								<p>As a step toward system-on-chip integration, I wrapped the RISC-V core as
+								an AHB-Lite (AMBA) subordinate - a bus-controllable accelerator rather than a
+								bus master. The idea was to model how a processor is programmed in a real
+								system: an external chip (laptop for example) flashes a program into the core's
+								instruction and data memory over the bus, much like loading firmware onto a
+								microcontroller, then starts the core and reads results back. The core exposes
+								memory-mapped control and status registers (start/stop control, program-counter
+								and status readback, and memory address/data ports), and the wrapper translates
+								the AHB two-phase, wait-state handshake into the core's simple internal memory
+								interface. This subordinate wrapper was developed in RTL but it wasn't brought up
+								in full simulation or carried into the final build, as we ran out of time and
+								it was not quite the architecture we were aiming for.</p>
 
 								<h2>Scope &amp; Outcome</h2>
 								<p>Initial goals also included pipelining, the RISC-V vector extension (RVV),
@@ -193,9 +197,8 @@
 								bus-connected memory introduced verification and physical-design complexity
 								that put a clean signoff at risk within the project timeline. To guarantee a
 								complete, verifiable end-to-end implementation, the final taped-out design was
-								scoped to the non-pipelined RV32I core with directly-integrated memory; the
-								AHB bus was designed and verified in simulation but not carried into the final
-								physical build. The result is a functional RV32I processor implemented through
+								scoped to the non-pipelined RV32I core with directly-integrated memory; the AHB-Lite subordinate wrapper was developed in RTL as a target integration path but was
+								not fully verified in simulation or carried into the final physical build. The result is a functional RV32I processor implemented through
 								the entire flow from RTL to GDSII, with the design trade-offs in area, power,
 								and timing explored and documented along the way.</p>
 
@@ -211,7 +214,7 @@
 								</ul>
 
 								<ul class="actions">
-									<li><a href="https://github.com/connortufts/rvv" class="button primary icon brands fa-github">View on GitHub</a></li>
+									<!-- <li><a href="https://github.com/connortufts/rvv" class="button primary icon brands fa-github">View on GitHub</a></li> -->
 									<li><a href="index.html" class="button">Back to Portfolio</a></li>
 								</ul>
 
